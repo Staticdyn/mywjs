@@ -10,6 +10,7 @@ export default defineConfig({
     hmr: {
       host: 'localhost',
       protocol: 'ws',
+      overlay: 'false',
     },
   },
   build: {
