@@ -146,7 +146,7 @@ circlesOnStroke.to(
 )
 // circlesOnStroke.to('#path-3 #dot', { opacity: 0, duration: 0.5 }, '-=2')
 
-if (window.innerWidth < 991) {
+function reorderChildren() {
   const parentDiv = document.querySelector('.ins-sticky-item')
   const children = Array.from(parentDiv.children)
 
@@ -155,14 +155,28 @@ if (window.innerWidth < 991) {
     parentDiv.removeChild(parentDiv.firstChild)
   }
 
-  // Rearrange the children array
-  const reorderedChildren = []
-  for (let i = 0; i < children.length; i += 2) {
-    reorderedChildren.push(children[i + 1])
-    reorderedChildren.push(children[i])
-  }
+  // Rearrange or revert the children order based on screen width
+  if (window.innerWidth < 991) {
+    const reorderedChildren = []
+    for (let i = 0; i < children.length; i += 2) {
+      reorderedChildren.push(children[i + 1])
+      reorderedChildren.push(children[i])
+    }
 
-  reorderedChildren.forEach((child) => {
-    parentDiv.appendChild(child)
-  })
+    // Append the reordered children back to the parent div
+    reorderedChildren.forEach((child) => {
+      parentDiv.appendChild(child)
+    })
+  } else {
+    // Append the original children order back to the parent div
+    children.forEach((child) => {
+      parentDiv.appendChild(child)
+    })
+  }
 }
+
+// Call the reorderChildren function initially
+reorderChildren()
+
+// Add event listener for resize event
+window.addEventListener('resize', reorderChildren)
