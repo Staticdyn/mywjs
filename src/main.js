@@ -1,5 +1,5 @@
 import './styles/style.css'
-import { gsap } from 'gsap'
+import { gsap } from 'gsap/all'
 import { ScrollTrigger } from 'gsap/all'
 import { MotionPathPlugin } from 'gsap/all'
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin)
@@ -98,62 +98,71 @@ heroAnimation.to('.hero-left div', { opacity: 1, duration: 1 })
 
 gsap.to('.section', { opacity: 1 })
 
-function initMotionPath() {
-  function createTween() {
-    gsap.registerPlugin(MotionPathPlugin, ScrollTrigger)
-    // declare a null tween variable
-    let circlesOnStroke = gsap.timeline({
-      defaults: {
-        ScrollTrigger: {
-          trigger: '.ins-bis .container',
-          start: 'top center',
-          end: 'bottom 90%',
-          scrub: true,
-        },
-      },
-    })
-    circlesOnStroke.to(
-      '#path-1 circle',
-      {
-        motionPath: {
-          path: '#stroke',
-          align: '#stroke',
-          alignOrigin: [0.5, 0.5],
-        },
-        duration: 8,
-      },
-      '<'
-    )
-    circlesOnStroke.to('#path-1 circle', { opacity: 0, duration: 0.5 }, '-=2')
-    circlesOnStroke.to(
-      '#path-2 circle',
-      {
-        motionPath: {
-          path: '#path-2 #stroke',
-          align: '#path-2 #stroke',
-          alignOrigin: [0.5, 0.5],
-        },
-        duration: 8,
-      },
-      '<'
-    )
-    circlesOnStroke.to('#path-2 circle', { opacity: 0, duration: 0.5 }, '-=2')
+let circlesOnStroke = gsap.timeline({
+  ScrollTrigger: {
+    trigger: '[stroke-section]',
+    start: 'top center',
+    end: 'bottom center',
+    markers: true,
+    scrub: 1,
+  },
+})
 
-    circlesOnStroke.to(
-      '#path-3 #dot',
-      {
-        motionPath: {
-          path: '#path-3 #stroke',
-          align: '#path-3 #stroke',
-          alignOrigin: [0.5, 0.5],
-        },
-        duration: 8,
-      },
-      '<'
-    )
-    circlesOnStroke.to('#path-3 #dot', { opacity: 0, duration: 0.5 }, '-=2')
+circlesOnStroke.to(
+  '#path-1 circle',
+  {
+    motionPath: {
+      path: '#stroke',
+      align: '#stroke',
+      alignOrigin: [0.5, 0.5],
+    },
+  },
+  '<'
+)
+// circlesOnStroke.to('#path-1 circle', { opacity: 0, duration: 0.5 }, '-=2')
+circlesOnStroke.to(
+  '#path-2 circle',
+  {
+    motionPath: {
+      path: '#path-2 #stroke',
+      align: '#path-2 #stroke',
+      alignOrigin: [0.5, 0.5],
+    },
+  },
+  '<'
+)
+// circlesOnStroke.to('#path-2 circle', { opacity: 0, duration: 0.5 }, '-=2')
+
+circlesOnStroke.to(
+  '#path-3 #dot',
+  {
+    motionPath: {
+      path: '#path-3 #stroke',
+      align: '#path-3 #stroke',
+      alignOrigin: [0.5, 0.5],
+    },
+  },
+  '<'
+)
+// circlesOnStroke.to('#path-3 #dot', { opacity: 0, duration: 0.5 }, '-=2')
+
+if (window.innerWidth < 991) {
+  const parentDiv = document.querySelector('.ins-sticky-item')
+  const children = Array.from(parentDiv.children)
+
+  // Remove all existing children
+  while (parentDiv.firstChild) {
+    parentDiv.removeChild(parentDiv.firstChild)
   }
-  createTween()
-}
 
-document.addEventListener('DOMContentLoaded', initMotionPath())
+  // Rearrange the children array
+  const reorderedChildren = []
+  for (let i = 0; i < children.length; i += 2) {
+    reorderedChildren.push(children[i + 1])
+    reorderedChildren.push(children[i])
+  }
+
+  reorderedChildren.forEach((child) => {
+    parentDiv.appendChild(child)
+  })
+}
