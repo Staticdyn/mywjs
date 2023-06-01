@@ -154,7 +154,6 @@ const navToggleOn = gsap.timeline().fromTo(
 ScrollTrigger.create({
   animation: navToggleOn,
   trigger: '.ins-intake-sticky-section',
-  markers: true,
   start: '0',
   toggleActions: 'play reset resume reset',
 })
@@ -166,7 +165,6 @@ const navToggleOff = gsap.to('.ins-top-bar', {
 ScrollTrigger.create({
   animation: navToggleOff,
   trigger: '.ins-intake-sticky-section',
-  markers: true,
   start: 'bottom 50%',
   toggleActions: 'play reset reset reset',
 })
