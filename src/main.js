@@ -117,7 +117,6 @@ circlesOnStroke
   )
   .to('#path-2 #circle', { opacity: 0, duration: 0.1 }, '-=0.1')
   .to('#path-3 #circle', { opacity: 100, duration: 0.1 }, '+=0.2')
-
   .to(
     '#path-3 #circle',
     {
@@ -141,6 +140,66 @@ ScrollTrigger.create({
   start: 'top 70%',
   end: 'bottom 50%',
   scrub: 1,
+})
+
+const navToggleOn = gsap.timeline().fromTo(
+  '.ins-top-bar',
+  { opacity: 0 },
+  {
+    opacity: 1,
+    duration: 0.4,
+  }
+)
+
+ScrollTrigger.create({
+  animation: navToggleOn,
+  trigger: '.ins-intake-sticky-section',
+  markers: true,
+  start: '0',
+  toggleActions: 'play reset resume reset',
+})
+
+const navToggleOff = gsap.to('.ins-top-bar', {
+  opacity: 0,
+})
+
+ScrollTrigger.create({
+  animation: navToggleOff,
+  trigger: '.ins-intake-sticky-section',
+  markers: true,
+  start: 'bottom 50%',
+  toggleActions: 'play reset reset reset',
+})
+
+// Grab all your elements with the same class
+const elements = gsap.utils.toArray('.ins-sync-point')
+// gsap.set(elements, { opcaity: 0 })
+elements.forEach((element) => {
+  // Create a timeline for each element
+  const tlSolution = gsap
+    .timeline({
+      // onComplete: function () {
+      //   this.kill()
+      // },
+    })
+    .fromTo(
+      element,
+      { opacity: 0, y: '20' },
+      {
+        opacity: 1,
+        ease: 'Power1.easeOut',
+        y: '0',
+        stagger: true,
+        duration: 0.4, // animation duration
+      }
+    )
+
+  ScrollTrigger.create({
+    animation: tlSolution,
+    trigger: element,
+    start: 'top 80%', // start when "top" of the element hits the "80%" of the viewport
+    end: 'bottom 20%', // end when "bottom" of the element hits the "20%" of the viewport
+  })
 })
 
 function reorderChildren() {
