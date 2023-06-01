@@ -14,6 +14,7 @@ imagesIns.forEach((element, i) => {
   element.style.color = currentColor
   element.style.opacity = '100'
 })
+
 // Link timelines to scroll position
 function createScrollTrigger(triggerElement, timeline) {
   // Reset tl when scroll out of view past bottom of screen
@@ -25,6 +26,7 @@ function createScrollTrigger(triggerElement, timeline) {
       timeline.pause()
     },
   })
+
   // Play tl when scrolled into view (60% from top of screen)
   ScrollTrigger.create({
     trigger: triggerElement,
@@ -46,26 +48,6 @@ imagesIns.forEach((element) => {
     repeatRefresh: true,
   })
 })
-// const sections = document.querySelectorAll('.section')
-// sections.forEach((section) => {
-//   const descendants = section.querySelectorAll('*')
-//   descendants.forEach((child) => {
-//     child.setAttribute('fade-in', '')
-//   })
-// })
-
-// gsap.fromTo(
-//   '[fade-in]',
-//   { opacity: 0 },
-//   {
-//     opacity: 1,
-//     ease: 'power1.inOut',
-//     duration: 1,
-//     scrollTrigger: {
-//       trigger: triggerElement,
-//     },
-//   }
-// )
 
 document.querySelectorAll('.ins-cl-item').forEach((element) => {
   let tl = gsap.timeline()
@@ -98,53 +80,68 @@ heroAnimation.to('.hero-left div', { opacity: 1, duration: 1 })
 
 gsap.to('.section', { opacity: 1 })
 
-let circlesOnStroke = gsap.timeline({
-  ScrollTrigger: {
-    trigger: '[stroke-section]',
-    start: 'top center',
-    end: 'bottom center',
-    markers: true,
-    scrub: 1,
-  },
+//// circle on stroke Timeline ////////////
+let circlesOnStroke = gsap.timeline({ defaults: { ease: 'linear' } })
+circlesOnStroke
+  .to('#path-1 #circle', { opacity: 100, duration: 0.1 })
+
+  .to(
+    '#path-1 #circle',
+    {
+      motionPath: {
+        start: 0,
+        path: '#stroke',
+        align: '#stroke',
+        alignOrigin: [0.5, 0.5],
+        immediateRender: true,
+      },
+      immediateRender: true,
+    },
+    '<'
+  )
+  .to('#path-1 #circle', { opacity: 0, duration: 0.1 }, '-=0.1')
+  .to('#path-2 #circle', { opacity: 100, duration: 0.1 }, '+=0.2')
+  .to(
+    '#path-2 #circle',
+    {
+      duration: 2,
+      motionPath: {
+        start: 0,
+        path: '#path-2 #stroke',
+        align: '#path-2 #stroke',
+        alignOrigin: [0.5, 0.5],
+        immediateRender: true,
+      },
+    },
+    '<10%'
+  )
+  .to('#path-2 #circle', { opacity: 0, duration: 0.1 }, '-=0.1')
+  .to('#path-3 #circle', { opacity: 100, duration: 0.1 }, '+=0.2')
+
+  .to(
+    '#path-3 #circle',
+    {
+      duration: 1,
+      motionPath: {
+        start: 0,
+        path: '#path-3 #stroke',
+        align: '#path-3 #stroke',
+        alignOrigin: [0.5, 0.5],
+        immediateRender: true,
+      },
+      immediateRender: true,
+    },
+    '<95%'
+  )
+  .to('#path-3 #circle', { opacity: 0, duration: 0.1 }, '-=0.1')
+
+ScrollTrigger.create({
+  animation: circlesOnStroke,
+  trigger: '.built-for-ins-wrap',
+  start: 'top 70%',
+  end: 'bottom 50%',
+  scrub: 1,
 })
-
-circlesOnStroke.to(
-  '#path-1 circle',
-  {
-    motionPath: {
-      path: '#stroke',
-      align: '#stroke',
-      alignOrigin: [0.5, 0.5],
-    },
-  },
-  '<'
-)
-// circlesOnStroke.to('#path-1 circle', { opacity: 0, duration: 0.5 }, '-=2')
-circlesOnStroke.to(
-  '#path-2 circle',
-  {
-    motionPath: {
-      path: '#path-2 #stroke',
-      align: '#path-2 #stroke',
-      alignOrigin: [0.5, 0.5],
-    },
-  },
-  '<'
-)
-// circlesOnStroke.to('#path-2 circle', { opacity: 0, duration: 0.5 }, '-=2')
-
-circlesOnStroke.to(
-  '#path-3 #dot',
-  {
-    motionPath: {
-      path: '#path-3 #stroke',
-      align: '#path-3 #stroke',
-      alignOrigin: [0.5, 0.5],
-    },
-  },
-  '<'
-)
-// circlesOnStroke.to('#path-3 #dot', { opacity: 0, duration: 0.5 }, '-=2')
 
 function reorderChildren() {
   const parentDiv = document.querySelector('.ins-sticky-item')
@@ -174,7 +171,6 @@ function reorderChildren() {
     })
   }
 }
-
 // Call the reorderChildren function initially
 reorderChildren()
 
