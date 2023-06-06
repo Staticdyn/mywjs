@@ -43,7 +43,7 @@ function createScrollTrigger(triggerElement, timeline) {
     },
   })
 
-  // Play tl when scrolled into view (60% from top of screen)
+  // Play tl when scrolled into view (80% from top of screen)
   ScrollTrigger.create({
     trigger: triggerElement,
     start: 'top 80%',
@@ -55,8 +55,8 @@ imagesIns.forEach((element) => {
   gsap.to(element, {
     x: 'random(-15, 15)',
     y: 'random(-15, 15)',
-    duration: 1 * Math.random() + 2,
-    ease: 'sine.inOut',
+    duration: Math.ceil(4 * Math.random() + 1),
+    ease: 'linear',
     repeat: -1,
     scale: 1.03,
     yoyo: true,
@@ -90,6 +90,7 @@ document.querySelectorAll('[text-split]').forEach(function (element) {
     // onComplete: () => revertText(element),
   })
   createScrollTrigger(element, tl)
+  // gsap.set('[text-split]', { opacity: 1, lineHeight: '100%' })
   gsap.set('[text-split]', { opacity: 1 })
 })
 
