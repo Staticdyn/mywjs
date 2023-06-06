@@ -70,6 +70,7 @@ imagesIns.forEach((element) => {
 //   tl.from(element, {
 //     opacity: 0,
 //     y: 120,
+//     delay: 1,
 //     duration: 1,
 //     ease: 'expo.out',
 //     stagger: 0.1,
@@ -79,6 +80,7 @@ imagesIns.forEach((element) => {
 
 document.querySelectorAll('[text-split]').forEach(function (element) {
   let tl = gsap.timeline({ paused: true })
+
   tl.from(element.querySelectorAll('.char'), {
     yPercent: 50,
     opacity: 0,
@@ -88,9 +90,8 @@ document.querySelectorAll('[text-split]').forEach(function (element) {
     // onComplete: () => revertText(element),
   })
   createScrollTrigger(element, tl)
+  gsap.set('[text-split]', { opacity: 1 })
 })
-
-gsap.set('[text-split]', { opacity: 1 })
 
 const heroAnimation = gsap.timeline()
 heroAnimation.to('.hero-left div', { opacity: 1, duration: 1 })
@@ -231,7 +232,7 @@ function reorderChildren() {
   }
 
   // Rearrange or revert the children order based on screen width
-  if (window.innerWidth < 991) {
+  if (window.innerWidth < 768) {
     const reorderedChildren = []
     for (let i = 0; i < children.length; i += 2) {
       reorderedChildren.push(children[i + 1])
