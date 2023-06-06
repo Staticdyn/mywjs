@@ -2,11 +2,20 @@ import './styles/style.css'
 import { gsap } from 'gsap/all'
 import { ScrollTrigger } from 'gsap/all'
 import { MotionPathPlugin } from 'gsap/all'
+// import SplitType from 'split-type'
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin)
 
 const colorArr = ['#0050FF', '#FF7D64', '#834DED', '#ffb03e', '#b5ccff']
 let imagesIns = document.querySelectorAll('.ins-cs-btn')
 // let animatedHeadings = document.querySelectorAll('h1, h2, h3')
+
+// Get all elements with the "stroke" attribute
+const strokeElements = document.querySelectorAll('#stroke')
+// Apply stroke dash attributes for line animation in circleOnStroke.timeline
+strokeElements.forEach(function (element) {
+  element.style.setProperty('stroke-dashoffset', '600')
+  element.style.setProperty('stroke-dasharray', '600')
+})
 
 imagesIns.forEach((element, i) => {
   const currentColor = colorArr[i % colorArr.length]
@@ -14,6 +23,13 @@ imagesIns.forEach((element, i) => {
   element.style.color = currentColor
   element.style.opacity = '100'
 })
+
+//revert split type back to what it was
+
+// const revertText = function (e) {
+//   console.log('fin', e)
+//   SplitType.revert(e)
+// }
 
 // Link timelines to scroll position
 function createScrollTrigger(triggerElement, timeline) {
@@ -49,17 +65,17 @@ imagesIns.forEach((element) => {
   })
 })
 
-document.querySelectorAll('.ins-cl-item').forEach((element) => {
-  let tl = gsap.timeline()
-  tl.from(element, {
-    opacity: 0,
-    y: 120,
-    duration: 1,
-    ease: 'expo.out',
-    stagger: 0.1,
-  })
-  createScrollTrigger(element, tl)
-})
+// document.querySelectorAll('.ins-cl-item').forEach((element) => {
+//   let tl = gsap.timeline()
+//   tl.from(element, {
+//     opacity: 0,
+//     y: 120,
+//     duration: 1,
+//     ease: 'expo.out',
+//     stagger: 0.1,
+//   })
+//   createScrollTrigger(element, tl)
+// })
 
 document.querySelectorAll('[text-split]').forEach(function (element) {
   let tl = gsap.timeline({ paused: true })
@@ -69,6 +85,7 @@ document.querySelectorAll('[text-split]').forEach(function (element) {
     duration: 1,
     ease: 'expo.out',
     stagger: { amount: 0.3 },
+    // onComplete: () => revertText(element),
   })
   createScrollTrigger(element, tl)
 })
@@ -84,7 +101,7 @@ gsap.to('.section', { opacity: 1 })
 let circlesOnStroke = gsap.timeline({ defaults: { ease: 'linear' } })
 circlesOnStroke
   .to('#path-1 #circle', { opacity: 100, duration: 0.1 })
-
+  .to('#path-1 #stroke', { strokeDashoffset: 0 }, '<')
   .to(
     '#path-1 #circle',
     {
@@ -115,8 +132,11 @@ circlesOnStroke
     },
     '<10%'
   )
+  .to('#path-2 #stroke', { strokeDashoffset: 0 }, '<')
+
   .to('#path-2 #circle', { opacity: 0, duration: 0.1 }, '-=0.1')
   .to('#path-3 #circle', { opacity: 100, duration: 0.1 }, '+=0.2')
+  .to('#path-3 #stroke', { strokeDashoffset: 0, duration: 1 }, '<95%')
   .to(
     '#path-3 #circle',
     {
@@ -130,9 +150,10 @@ circlesOnStroke
       },
       immediateRender: true,
     },
-    '<95%'
+    '<'
   )
-  .to('#path-3 #circle', { opacity: 0, duration: 0.1 }, '-=0.1')
+
+  .to('#path-3 #circle', { opacity: 0, duration: 0.1 }, '-=80%')
 
 ScrollTrigger.create({
   animation: circlesOnStroke,
